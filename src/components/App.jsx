@@ -21,18 +21,26 @@ export class App extends Component {
       qry,
       images: [],
       page: 1,
+      error: false,
+      totalItems: 0,
     });
   };
 
   async componentDidUpdate(_, prevState) {
     const { qry, page } = this.state;
     if (qry !== '' && (prevState.page !== page || prevState.qry !== qry)) {
-      this.setState({ isLoading: true });
-      const response = await API.getImages(qry, page);
-      this.setState(prevState => ({
-        images: [...prevState.images, ...response.hits],
-        isLoading: false,
-      }));
+      this.setState({ isLoading: true, error: false });
+      try {
+        const response = await API.getImages(qry, page);
+        this.setState(prevState => ({
+          images: [...prevState.images, ...response.hits],
+          isLoading: false,
+          totalItems: response.totalHits,
+        }));
+      } catch (error) {
+        this.setState({ error: true });
+        console.log('error :>> ', error);
+      }
     }
   }
 
@@ -52,14 +60,17 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, current } = this.state;
+    const { images, isLoading, current, totalItems, error } = this.state;
     return (
       <AppBox>
         <Searchbar onSubmit={this.setSearch} />
+        {error && <p>Sorry... Page Not Found</p>}
         <ImageGallery images={images} showImg={this.showImg} />
         <BoxBtn>
           {isLoading && <Loader />}
-          {images.length > 0 && <Button onClick={this.loadMore} />}
+          {images.length > 0 && images.length < totalItems && (
+            <Button onClick={this.loadMore} />
+          )}
         </BoxBtn>
         {!!current && (
           <Modal src={current.url} alt={current.alt} onClose={this.closeImg} />

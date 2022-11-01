@@ -1,3 +1,5 @@
+import { FiSearch } from 'react-icons/fi';
+import PropTypes from 'prop-types';
 import {
   SearchbarBox,
   SearchForm,
@@ -15,6 +17,7 @@ export const Searchbar = ({ onSubmit }) => {
     <SearchbarBox>
       <SearchForm onSubmit={handleSubmit}>
         <SearchFormButton type="submit">
+          <FiSearch />
           <SearchFormButtonLabel>Search</SearchFormButtonLabel>
         </SearchFormButton>
 
@@ -28,4 +31,8 @@ export const Searchbar = ({ onSubmit }) => {
       </SearchForm>
     </SearchbarBox>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
