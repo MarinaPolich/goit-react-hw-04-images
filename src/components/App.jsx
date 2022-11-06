@@ -16,12 +16,13 @@ export const App = () => {
   const [error, setError] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
 
-  useEffect(() => {
+  const searcQry = gry => {
+    setQry(gry);
     setImages([]);
     setPage(1);
     setError(false);
     setTotalItems(0);
-  }, [qry]);
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -55,7 +56,7 @@ export const App = () => {
 
   return (
     <AppBox>
-      <Searchbar onSubmit={setQry} />
+      <Searchbar onSubmit={searcQry} />
       {error && <p>Sorry... Page Not Found</p>}
       <ImageGallery images={images} showImg={showImg} />
       <BoxBtn>

@@ -7,12 +7,20 @@ import {
   SearchFormButton,
   SearchFormButtonLabel,
 } from './Searchbar.styled';
+import { useState } from 'react';
 
 export const Searchbar = ({ onSubmit }) => {
+  const [value, setValue] = useState('');
+
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit(e.currentTarget.elements.qry.value);
+    onSubmit(value);
   };
+
+  const handleChange = e => {
+    setValue(e.target.value);
+  };
+
   return (
     <SearchbarBox>
       <SearchForm onSubmit={handleSubmit}>
@@ -25,6 +33,8 @@ export const Searchbar = ({ onSubmit }) => {
           name="qry"
           type="text"
           autocomplete="off"
+          value={value}
+          onChange={handleChange}
           autoFocus
           placeholder="Search images and photos"
         />
